@@ -1,7 +1,4 @@
-﻿✅ **Eccolo! Copia tutto il testo sotto (da `#` fino a fine) e incolla in VSC:**
-
-```
-# 🌿 Amazon Rainforest Species Risk Predictor
+﻿# 🌿 Amazon Rainforest Species Risk Predictor
 
 **ML/MLOps Portfolio Project** - Predicting extinction risk for Amazon rainforest species using synthetic data, XGBoost, FastAPI, Docker, and Kubernetes.
 
@@ -494,7 +491,7 @@ Built with ❤️ for:
 
 **Last Updated**: January 7, 2026
 **Status**: ✅ Production Ready (Phase 1 Complete)
-```
+
 
 ***
 
