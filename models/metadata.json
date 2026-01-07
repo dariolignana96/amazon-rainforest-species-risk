@@ -1,0 +1,34 @@
+{
+  "n_features": 9,
+  "feature_names": [
+    "population_size",
+    "habitat_fragmentation",
+    "climate_vulnerability",
+    "illegal_hunting_pressure",
+    "conservation_efforts_index",
+    "habitat_Floor",
+    "habitat_River",
+    "breeding_program_exists_1",
+    "legal_protection_1"
+  ],
+  "iucn_categories": [
+    "Least Concern",
+    "Vulnerable",
+    "Endangered",
+    "Critically Endangered"
+  ],
+  "models": {
+    "xgboost": {
+      "accuracy": 0.94,
+      "f1": 0.9378388872790495
+    },
+    "random_forest": {
+      "accuracy": 0.91,
+      "f1": 0.9070194597973418
+    },
+    "logistic_regression": {
+      "accuracy": 0.615,
+      "f1": 0.5846991351089712
+    }
+  }
+}
