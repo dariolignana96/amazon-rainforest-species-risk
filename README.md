@@ -457,8 +457,6 @@ Contributions are welcome! Please follow these steps:
 
 **Author**: Dario Lignana
 - **GitHub**: @dariolignana96
-- **Email**: lignana.dario@gmail.com
-- **Location**: Turin, Italy
 
 **Issues & Discussions**:
 - Open an Issue on GitHub
@@ -489,6 +487,7 @@ Built with ❤️ for:
 
 ---
 
+git add README.md
 **Last Updated**: January 7, 2026
 **Status**: ✅ Production Ready (Phase 1 Complete)
 
