@@ -1,0 +1,494 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Species Risk Predictor</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1e7b34 0%, #2d5a3d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        header h1 { font-size: 2.2em; margin-bottom: 5px; }
+        header p { font-size: 1em; opacity: 0.9; }
+
+        .status {
+            background: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .status.connected { color: #10b981; }
+        .status.connecting { color: #f59e0b; }
+        .status.error { color: #ef4444; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            header h1 { font-size: 1.6em; }
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .card h2 {
+            color: #1e7b34;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #1e7b34;
+            box-shadow: 0 0 0 2px rgba(30, 123, 52, 0.1);
+        }
+
+        .slider-group {
+            margin-bottom: 15px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        .slider-value {
+            background: #f0f0f0;
+            padding: 2px 8px;
+            border-radius: 3px;
+            color: #1e7b34;
+            font-weight: 600;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #1e7b34;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #1e7b34;
+            cursor: pointer;
+            border: none;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #1e7b34;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #1e7b34;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover { background: #176a2b; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+
+        .loading.show { display: block; }
+
+        .spinner {
+            border: 3px solid #f0f0f0;
+            border-top: 3px solid #1e7b34;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .result.show { display: block; }
+
+        .result-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .result-item:last-child { border-bottom: none; }
+
+        .result-label { font-weight: 600; color: #555; font-size: 0.9em; margin-bottom: 5px; }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .least-concern { background: #dcfce7; color: #166534; }
+        .vulnerable { background: #fef3c7; color: #92400e; }
+        .endangered { background: #fed7aa; color: #92400e; }
+        .critically-endangered { background: #fecaca; color: #7f1d1d; }
+
+        .confidence { font-size: 1.4em; font-weight: 700; color: #1e7b34; }
+
+        .probs {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f9fafb;
+            border-radius: 4px;
+        }
+
+        .prob-item {
+            margin-bottom: 10px;
+        }
+
+        .prob-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .prob-bar {
+            background: #e5e7eb;
+            height: 20px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .prob-fill {
+            background: #1e7b34;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 5px;
+            color: white;
+            font-size: 0.75em;
+            font-weight: 600;
+            transition: width 0.3s;
+        }
+
+        .error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 15px;
+            display: none;
+            font-size: 0.9em;
+        }
+
+        .error.show { display: block; }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1> Species Risk Predictor</h1>
+            <p>Predict extinction risk for Amazon rainforest species</p>
+        </header>
+
+        <div class="status connecting" id="status"> Connecting to API...</div>
+
+        <div class="grid">
+            <div class="card">
+                <h2> Features</h2>
+                <form id="form">
+                    <div class="form-group">
+                        <label>Population Size</label>
+                        <input type="number" id="pop" value="5000" min="1" required>
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Habitat Fragmentation</span>
+                            <span class="slider-value" id="frag-val">0.50</span>
+                        </div>
+                        <input type="range" id="frag" min="0" max="1" step="0.01" value="0.5">
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Climate Vulnerability</span>
+                            <span class="slider-value" id="clim-val">0.50</span>
+                        </div>
+                        <input type="range" id="clim" min="0" max="1" step="0.01" value="0.5">
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Hunting Pressure</span>
+                            <span class="slider-value" id="hunt-val">0.30</span>
+                        </div>
+                        <input type="range" id="hunt" min="0" max="1" step="0.01" value="0.3">
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Conservation Efforts</span>
+                            <span class="slider-value" id="cons-val">0.50</span>
+                        </div>
+                        <input type="range" id="cons" min="0" max="1" step="0.01" value="0.5">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Habitat</label>
+                        <select id="habitat" required>
+                            <option value="Canopy">Rainforest Canopy</option>
+                            <option value="Floor">Forest Floor</option>
+                            <option value="River">River Floodplain</option>
+                        </select>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="breed">
+                        <label for="breed" style="margin: 0;">Breeding Program</label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="protect" checked>
+                        <label for="protect" style="margin: 0;">Legal Protection</label>
+                    </div>
+
+                    <button type="submit"> Predict</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2> Result</h2>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Analyzing...</p>
+                </div>
+
+                <div class="result" id="result">
+                    <div class="result-item">
+                        <div class="result-label">Risk Category</div>
+                        <div><span class="risk-badge" id="category"></span></div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-label">Confidence</div>
+                        <div class="confidence" id="conf"></div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-label">Code</div>
+                        <div id="code" style="font-weight: 600; color: #1e7b34;"></div>
+                    </div>
+
+                    <div class="probs">
+                        <strong>Probabilities</strong>
+                        <div id="probs"></div>
+                    </div>
+                </div>
+
+                <div class="error" id="error"></div>
+            </div>
+        </div>
+
+        <footer>
+             Amazon Rainforest Species Risk Predictor | <a href="https://github.com/dariolignana96/amazon-rainforest-species-risk" style="color: white;">GitHub</a>
+        </footer>
+    </div>
+
+    <script>
+        const API = "http://127.0.0.1:8000";
+
+        // Slider updates
+        document.getElementById("frag").addEventListener("input", e => {
+            document.getElementById("frag-val").textContent = parseFloat(e.target.value).toFixed(2);
+        });
+        document.getElementById("clim").addEventListener("input", e => {
+            document.getElementById("clim-val").textContent = parseFloat(e.target.value).toFixed(2);
+        });
+        document.getElementById("hunt").addEventListener("input", e => {
+            document.getElementById("hunt-val").textContent = parseFloat(e.target.value).toFixed(2);
+        });
+        document.getElementById("cons").addEventListener("input", e => {
+            document.getElementById("cons-val").textContent = parseFloat(e.target.value).toFixed(2);
+        });
+
+        // Check API
+        async function checkAPI() {
+            try {
+                const res = await fetch(\\/health\);
+                if (res.ok) {
+                    document.getElementById("status").textContent = " API Connected";
+                    document.getElementById("status").className = "status connected";
+                }
+            } catch (e) {
+                document.getElementById("status").textContent = " API Disconnected";
+                document.getElementById("status").className = "status error";
+            }
+        }
+
+        window.addEventListener("load", checkAPI);
+
+        // Form submit
+        document.getElementById("form").addEventListener("submit", async e => {
+            e.preventDefault();
+
+            const payload = {
+                population_size: parseFloat(document.getElementById("pop").value),
+                habitat_fragmentation: parseFloat(document.getElementById("frag").value),
+                climate_vulnerability: parseFloat(document.getElementById("clim").value),
+                illegal_hunting_pressure: parseFloat(document.getElementById("hunt").value),
+                conservation_efforts_index: parseFloat(document.getElementById("cons").value),
+                habitat: document.getElementById("habitat").value,
+                breeding_program_exists: document.getElementById("breed").checked ? 1 : 0,
+                legal_protection: document.getElementById("protect").checked ? 1 : 0,
+            };
+
+            document.getElementById("loading").classList.add("show");
+            document.getElementById("result").classList.remove("show");
+            document.getElementById("error").classList.remove("show");
+
+            try {
+                const res = await fetch(\\/predict\, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload),
+                });
+
+                const data = await res.json();
+
+                const map = {
+                    0: ["Least Concern", "least-concern"],
+                    1: ["Vulnerable", "vulnerable"],
+                    2: ["Endangered", "endangered"],
+                    3: ["Critically Endangered", "critically-endangered"],
+                };
+
+                const [cat, cls] = map[data.risk_code];
+                document.getElementById("category").textContent = cat;
+                document.getElementById("category").className = \isk-badge \\;
+                document.getElementById("conf").textContent = (data.confidence * 100).toFixed(1) + "%";
+                document.getElementById("code").textContent = \Code: \\;
+
+                const cats = ["Least Concern", "Vulnerable", "Endangered", "Critically Endangered"];
+                let html = "";
+                Object.entries(data.probabilities).forEach(([key, val]) => {
+                    const idx = parseInt(key.split("_")[1]);
+                    const pct = (val * 100).toFixed(1);
+                    html += \<div class="prob-item"><div class="prob-label"><span>\</span><span>\%</span></div><div class="prob-bar"><div class="prob-fill" style="width: \%"></div></div></div>\;
+                });
+                document.getElementById("probs").innerHTML = html;
+
+                document.getElementById("loading").classList.remove("show");
+                document.getElementById("result").classList.add("show");
+            } catch (err) {
+                document.getElementById("loading").classList.remove("show");
+                document.getElementById("error").textContent = " Error: " + err.message;
+                document.getElementById("error").classList.add("show");
+            }
+        });
+    </script>
+</body>
+</html>
