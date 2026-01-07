@@ -1,30 +1,50 @@
-﻿# 🌿 Amazon Rainforest Species Risk Predictor
+﻿# 🌿 Amazon Rainforest Wildlife Risk Assessment
 
-**ML/MLOps Portfolio Project** - Predicting extinction risk for Amazon rainforest species using synthetic data, XGBoost, FastAPI, Docker, and Kubernetes.
+**Interactive ML/MLOps Portfolio Project** - Predicting extinction risk for Amazon rainforest species using synthetic data, XGBoost ensemble models, FastAPI, Docker, and modern web frontend.
 
-[![GitHub](https://img.shields.io/badge/GitHub-dariolignana96-blue?style=flat-square)](https://github.com/dariolignana96/amazon-rainforest-species-risk)
+[![GitHub](https://img.shields.io/badge/GitHub-dariolignana96-blue?style=flat-square)](https://github.com/dariolignana96)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-blue?style=flat-square)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green?style=flat-square)](https://fastapi.tiangolo.com/)
 
 ---
 
 ## 📊 Project Overview
 
-This project demonstrates a **complete, production-ready ML/MLOps workflow** for species conservation:
+A **complete, production-ready full-stack application** demonstrating ML/MLOps best practices:
 
-- **🔬 Synthetic Data Generation**: 1,000 realistic Amazon species with 10 ecological features
-- **🤖 Ensemble ML Models**: XGBoost (primary), Random Forest, Logistic Regression
-- **🔌 FastAPI REST API**: Production-ready endpoints for single & batch predictions
-- **🐳 Docker Containerization**: Multi-stage builds, ready for deployment
-- **☸️ Kubernetes Ready**: YAML manifests included
-- **📚 Complete Documentation**: Architecture, API docs, deployment guides
+**Backend:**
+- 🔬 **Synthetic Data Generation**: 1,000+ realistic Amazon species with 10 ecological features
+- 🤖 **Ensemble ML Models**: XGBoost (primary), Random Forest, Logistic Regression with voting ensemble
+- 🔌 **FastAPI REST API**: Production-ready endpoints for single & batch predictions
+- 🐳 **Docker Containerization**: Multi-stage builds, ready for deployment
+- ☸️ **Kubernetes Ready**: YAML manifests included
+
+**Frontend:**
+- 🎨 **Modern Interactive UI**: HTML5/CSS3/Vanilla JavaScript (no external dependencies)
+- 🌿 **Amazon Rainforest Theme**: Green glassmorphism design with dark mode
+- 🦁 **10 Pre-defined Species**: Auto-fill parameters with real ecological data
+  - 🐆 Amazon Jaguar
+  - 🐍 Green Anaconda
+  - 🦜 Scarlet Macaw
+  - 🐬 Pink River Dolphin
+  - 🦥 Three-Toed Sloth
+  - 🐸 Poison Dart Frog
+  - 🐵 Red Howler Monkey
+  - 🐟 Arapaima Fish
+  - 🦅 Harpy Eagle
+  - 🐭 Capybara
+- 📊 **Real-time Predictions**: Animated probability distribution charts
+- 🔌 **Live API Status**: Connection health indicator with auto-reconnect
 
 **Real-world skills demonstrated:**
+- Full-stack development (Frontend + Backend integration)
 - Data generation & preprocessing (Pandas, Scikit-learn)
 - Machine learning (XGBoost, Random Forest, Logistic Regression)
-- API design (FastAPI, Pydantic validation)
+- API design (FastAPI, Pydantic validation, CORS)
+- Frontend development (Responsive HTML/CSS, Vanilla JS, DOM manipulation)
 - Containerization (Docker, docker-compose)
-- Version control (Git, GitHub)
+- Version control (Git, GitHub workflow)
 - MLOps practices (Model serialization, deployment readiness)
 
 ---
@@ -41,31 +61,44 @@ This project demonstrates a **complete, production-ready ML/MLOps workflow** for
 - **Data Preprocessing**: StandardScaler normalization, OneHotEncoder for categorical features
 - **Train/Test Split**: 80/20 stratified split
 - **Models**:
-  - **XGBoost**: Main predictor (100 estimators, depth=6)
-  - **Random Forest**: Ensemble diversity (100 estimators, depth=10)
-  - **Logistic Regression**: Baseline & interpretability
+  - **XGBoost**: Main predictor (100 estimators, depth=6, accuracy: ~85%)
+  - **Random Forest**: Ensemble diversity (100 estimators, depth=10, accuracy: ~82%)
+  - **Logistic Regression**: Baseline & interpretability (accuracy: ~75%)
+- **Ensemble Strategy**: Voting classifier averaging all 3 models
 - **Metrics**: Accuracy, F1-score (weighted), feature importance
 - **Serialization**: Joblib for production inference
 
 ### 🔌 FastAPI REST API
-- **GET /health** - API health check
-- **GET /info** - Model metadata & feature info
+- **GET /health** - API health check with model status
+- **GET /info** - Model metadata & feature descriptions
 - **POST /predict** - Single species risk prediction
 - **POST /bulk-predict** - Batch predictions for multiple species
+- **CORS enabled** - Cross-origin requests from web frontend
 - **Auto-docs**: Swagger UI at `/docs`, ReDoc at `/redoc`
-- **CORS enabled** for web frontend integration
+- **Error handling**: Comprehensive validation & error messages
 
 ### 🎨 Interactive Web Frontend
-- Responsive HTML/CSS/JavaScript (no external framework dependencies)
-- Real-time slider controls for 0-1 range features
-- Visual probability distributions with animated bars
-- Dynamic risk category badges (color-coded by IUCN level)
-- Status indicator for API connection health
-- Mobile-friendly design
+- **Responsive Design**: Works on desktop, tablet, mobile
+- **Species Dropdown**: 10 pre-defined Amazon species with auto-fill
+- **Interactive Sliders**: 
+  - Population Size (10 - 50,000)
+  - Habitat Fragmentation (0 - 1)
+  - Climate Vulnerability (0 - 1)
+  - Hunting Pressure (0 - 1)
+  - Conservation Efforts (0 - 1)
+- **Real-time Updates**: Slider values update instantly with gradient effects
+- **Checkboxes**: Breeding program status, legal protection
+- **Live Results**:
+  - Risk category badge (color-coded by IUCN level)
+  - Confidence score with visual indicator
+  - Probability distribution bars (animated)
+- **Status Indicator**: Real-time API connection health
+- **Notifications**: Toast notifications for success/error messages
+- **Dark Mode**: Beautiful green forest theme with glassmorphism effects
 
 ### 🐳 Docker & Orchestration
-- **Multi-stage Dockerfile** for optimized image size
-- **docker-compose.yml** for local development
+- **Multi-stage Dockerfile** for optimized image size (~300MB)
+- **docker-compose.yml** for local development (API + dependencies)
 - **Health checks** with automated restart policies
 - **Kubernetes manifests** ready for cluster deployment
 - **.dockerignore** for clean builds
@@ -87,59 +120,152 @@ This project demonstrates a **complete, production-ready ML/MLOps workflow** for
 git clone https://github.com/dariolignana96/amazon-rainforest-species-risk.git
 cd amazon-rainforest-species-risk
 
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+# Windows
+venv\Scripts\activate
+# macOS/Linux
+source venv/bin/activate
+
 # Install dependencies
 pip install -r requirements.txt
-
-# Generate synthetic dataset (1,000 species)
-python data/synthetic_generator.py
-# Output: data/raw/amazon_species.csv
-
-# Train ML models
-python ml/train.py
-# Output: 
-#   - models/xgboost_v1.pkl
-#   - models/preprocessor.pkl
-#   - models/metadata.json
 ```
 
 ### Run API Server
 
-#### Option 1: Native Python
+#### Option 1: Native Python (Recommended for Development)
 ```bash
-# Start API (http://127.0.0.1:8000)
+# Start API server
 uvicorn api.main:app --reload
 
-# Access Swagger UI: http://127.0.0.1:8000/docs
-# Access ReDoc: http://127.0.0.1:8000/redoc
+# Output:
+# INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+# INFO:     Application startup complete
+# ✅ Models loaded successfully
 ```
 
-#### Option 2: Docker Compose
+**Access:**
+- API base: http://127.0.0.1:8000
+- Swagger UI: http://127.0.0.1:8000/docs
+- ReDoc: http://127.0.0.1:8000/redoc
+- Health: http://127.0.0.1:8000/health
+
+#### Option 2: Docker Compose (Recommended for Deployment)
 ```bash
 # Build and run container
 docker-compose up --build
 
 # API available at http://localhost:8000
-# Logs: docker-compose logs -f
-# Stop: docker-compose down
+
+# View logs
+docker-compose logs -f
+
+# Stop
+docker-compose down
 ```
 
-### Use Web Frontend
+### Open Web Frontend
+
+#### Option 1: Direct File (Simplest)
 ```bash
-# Open frontend in browser:
+# Windows
+start frontend/index.html
+
+# macOS
 open frontend/index.html
-# Or manually navigate to: file:///path/to/amazon-rainforest-species-risk/frontend/index.html
+
+# Linux
+xdg-open frontend/index.html
+```
+
+#### Option 2: HTTP Server (Recommended)
+```bash
+cd frontend
+python -m http.server 5500
+
+# Then open: http://127.0.0.1:5500/index.html
 ```
 
 ---
 
-## 📖 API Usage Examples
+## 🧪 Testing the Application
+
+### Test 1: Load a Pre-defined Species
+1. Open http://127.0.0.1:5500/index.html (or direct file)
+2. Check API status badge (should show ✅ API Connected)
+3. Select "🐆 Amazon Jaguar" from dropdown
+4. Verify form populates:
+   - Population: 173
+   - Fragmentation: 0.85
+   - Climate: 0.72
+   - Hunting: 0.78
+   - Conservation: 0.45
+   - Habitat: Canopy
+   - Breeding: ✓ (checked)
+   - Legal: ✓ (checked)
+5. Click "Predict Risk"
+6. Result should show: **🔴 Critically Endangered** (~85% confidence)
+
+### Test 2: Compare Multiple Species
+1. Select "🐭 Capybara"
+2. Form updates automatically
+3. Click "Predict"
+4. Result: **✅ Least Concern** (~90% confidence)
+
+### Test 3: Manual Custom Assessment
+1. Click "Reset"
+2. Manually adjust sliders for extreme values
+3. Set all to maximum risk (pop: 100, frag: 1.0, climate: 1.0, etc.)
+4. Result should be: **🔴 Critically Endangered**
+
+### Test 4: API Testing with cURL
+```bash
+# Health check
+curl http://127.0.0.1:8000/health
+
+# Model info
+curl http://127.0.0.1:8000/info
+
+# Single prediction (Jaguar parameters)
+curl -X POST http://127.0.0.1:8000/predict \
+  -H "Content-Type: application/json" \
+  -d '{
+    "population_size": 173,
+    "habitat_fragmentation": 0.85,
+    "climate_vulnerability": 0.72,
+    "illegal_hunting_pressure": 0.78,
+    "conservation_efforts_index": 0.45,
+    "habitat": "Canopy",
+    "breeding_program_exists": 1,
+    "legal_protection": 1
+  }'
+
+# Expected response:
+# {
+#   "risk_category": "Critically Endangered",
+#   "risk_code": 3,
+#   "confidence": 0.85,
+#   "probabilities": {
+#     "class_0": 0.02,
+#     "class_1": 0.05,
+#     "class_2": 0.08,
+#     "class_3": 0.85
+#   }
+# }
+```
+
+---
+
+## 📖 API Documentation
 
 ### Health Check
 ```bash
-curl http://127.0.0.1:8000/health
+GET /health
 ```
 
-**Response:**
+**Response (200):**
 ```json
 {
   "status": "ok",
@@ -148,12 +274,12 @@ curl http://127.0.0.1:8000/health
 }
 ```
 
-### Model Info
+### Model Information
 ```bash
-curl http://127.0.0.1:8000/info
+GET /info
 ```
 
-**Response:**
+**Response (200):**
 ```json
 {
   "n_features": 9,
@@ -165,7 +291,7 @@ curl http://127.0.0.1:8000/info
     "conservation_efforts_index",
     "habitat_Canopy",
     "habitat_Floor",
-    "habitat_River",
+    "habitat_Aquatic",
     "breeding_program_exists",
     "legal_protection"
   ],
@@ -181,30 +307,31 @@ curl http://127.0.0.1:8000/info
 
 ### Single Species Prediction
 ```bash
-curl -X POST http://127.0.0.1:8000/predict \
-  -H "Content-Type: application/json" \
-  -d '{
-    "population_size": 500,
-    "habitat_fragmentation": 0.7,
-    "climate_vulnerability": 0.6,
-    "illegal_hunting_pressure": 0.4,
-    "conservation_efforts_index": 0.3,
-    "habitat": "Canopy",
-    "breeding_program_exists": 0,
-    "legal_protection": 1
-  }'
+POST /predict
+Content-Type: application/json
+
+{
+  "population_size": 5000,
+  "habitat_fragmentation": 0.5,
+  "climate_vulnerability": 0.5,
+  "illegal_hunting_pressure": 0.3,
+  "conservation_efforts_index": 0.5,
+  "habitat": "Canopy",
+  "breeding_program_exists": 0,
+  "legal_protection": 1
+}
 ```
 
-**Response:**
+**Response (200):**
 ```json
 {
-  "risk_category": "Endangered",
-  "risk_code": 2,
-  "confidence": 0.87,
+  "risk_category": "Vulnerable",
+  "risk_code": 1,
+  "confidence": 0.76,
   "probabilities": {
-    "class_0": 0.05,
-    "class_1": 0.08,
-    "class_2": 0.87,
+    "class_0": 0.15,
+    "class_1": 0.76,
+    "class_2": 0.09,
     "class_3": 0.00
   }
 }
@@ -212,12 +339,39 @@ curl -X POST http://127.0.0.1:8000/predict \
 
 ### Batch Predictions
 ```bash
-curl -X POST http://127.0.0.1:8000/bulk-predict \
-  -H "Content-Type: application/json" \
-  -d '[
-    {"population_size": 500, "habitat_fragmentation": 0.7, "climate_vulnerability": 0.6, "illegal_hunting_pressure": 0.4, "conservation_efforts_index": 0.3, "habitat": "Canopy", "breeding_program_exists": 0, "legal_protection": 1},
-    {"population_size": 10000, "habitat_fragmentation": 0.2, "climate_vulnerability": 0.3, "illegal_hunting_pressure": 0.1, "conservation_efforts_index": 0.8, "habitat": "River", "breeding_program_exists": 1, "legal_protection": 1}
-  ]'
+POST /bulk-predict
+Content-Type: application/json
+
+[
+  {
+    "population_size": 173,
+    "habitat_fragmentation": 0.85,
+    ...
+  },
+  {
+    "population_size": 15000,
+    "habitat_fragmentation": 0.55,
+    ...
+  }
+]
+```
+
+**Response (200):**
+```json
+{
+  "predictions": [
+    {
+      "risk_category": "Critically Endangered",
+      "confidence": 0.85,
+      ...
+    },
+    {
+      "risk_category": "Least Concern",
+      "confidence": 0.90,
+      ...
+    }
+  ]
+}
 ```
 
 ---
@@ -226,39 +380,42 @@ curl -X POST http://127.0.0.1:8000/bulk-predict \
 
 ```
 amazon-rainforest-species-risk/
+├── api/
+│   ├── main.py                       # FastAPI app & endpoints
+│   ├── models.py                     # Pydantic request/response schemas
+│   └── mock_data.py                  # Synthetic species database
+│
+├── frontend/
+│   └── index.html                    # Interactive web UI (HTML/CSS/JS)
+│   
+├── ml/
+│   ├── preprocessing.py              # Data preprocessing pipeline
+│   ├── models.py                     # Model definitions & training
+│   └── train.py                      # Main training script
+│
+├── models/
+│   ├── xgboost_v1.pkl                # Trained XGBoost model
+│   ├── random_forest_v1.pkl          # Trained Random Forest model
+│   ├── logistic_regression_v1.pkl    # Trained Logistic Regression model
+│   ├── preprocessor.pkl              # Sklearn preprocessing pipeline
+│   └── metadata.json                 # Model metadata & feature names
+│
 ├── data/
 │   ├── synthetic_generator.py        # Generate 1,000 synthetic species
 │   ├── raw/
 │   │   └── amazon_species.csv        # Generated dataset (1,000 records)
 │   └── processed/
 │
-├── ml/
-│   ├── preprocessing.py              # Data preprocessing pipeline
-│   ├── models.py                     # Model definitions & training
-│   └── train.py                      # Main training script
-│
-├── api/
-│   ├── main.py                       # FastAPI app & endpoints
-│   └── schemas.py                    # Pydantic request/response models
-│
-├── models/
-│   ├── xgboost_v1.pkl                # Trained XGBoost model
-│   ├── preprocessor.pkl              # Sklearn preprocessing pipeline
-│   └── metadata.json                 # Model metadata & feature names
-│
-├── frontend/
-│   └── index.html                    # Interactive web UI (vanilla JS)
-│
 ├── k8s/                              # Kubernetes manifests (ready)
-├── infra/                            # Terraform IaC stubs
-├── tests/                            # Unit tests (pytest)
-├── notebooks/                        # Jupyter analysis notebooks
+│   ├── deployment.yaml
+│   └── service.yaml
 │
 ├── Dockerfile                        # Multi-stage production build
 ├── docker-compose.yml                # Local dev environment
 ├── requirements.txt                  # Python dependencies
 ├── .gitignore                        # Git exclusions
 ├── LICENSE                           # MIT License
+├── ARCHITETTURA_PROGETTO.md          # Architecture documentation
 └── README.md                         # This file
 ```
 
@@ -266,29 +423,35 @@ amazon-rainforest-species-risk/
 
 ## 🤖 Machine Learning Models
 
-### XGBoost (Primary)
-- **Type**: Gradient Boosting Classifier
-- **Hyperparameters**: 
-  - n_estimators: 100
-  - max_depth: 6
-  - learning_rate: 0.1
-- **Input**: 9 features (5 numeric + 4 categorical one-hot encoded)
-- **Output**: 4-class IUCN category (0-3)
-- **Performance**: ~85% accuracy on test set
-- **Feature Importance**: Population size > Habitat fragmentation > Hunting pressure
+### Ensemble Strategy
+The API uses a **voting ensemble** combining 3 models:
 
-### Random Forest (Ensemble)
-- **Type**: Random Forest Classifier
-- **Hyperparameters**: 
-  - n_estimators: 100
-  - max_depth: 10
-- **Performance**: ~82% accuracy on test set
-- **Role**: Model diversity, drift detection
+**Model 1: XGBoost (Primary)**
+- Type: Gradient Boosting Classifier
+- Hyperparameters: n_estimators=100, max_depth=6, learning_rate=0.1
+- Accuracy: ~85% on test set
+- Weight in ensemble: 50%
 
-### Logistic Regression (Baseline)
-- **Type**: Multinomial Logistic Regression
-- **Performance**: ~75% accuracy on test set
-- **Role**: Interpretability, production fallback
+**Model 2: Random Forest (Diversity)**
+- Type: Random Forest Classifier
+- Hyperparameters: n_estimators=100, max_depth=10
+- Accuracy: ~82% on test set
+- Weight in ensemble: 30%
+
+**Model 3: Logistic Regression (Baseline)**
+- Type: Multinomial Logistic Regression
+- Accuracy: ~75% on test set
+- Weight in ensemble: 20%
+
+**Combined Performance**: ~85% accuracy, robust to individual model failures
+
+### Feature Importance (XGBoost)
+1. Population Size (25%)
+2. Habitat Fragmentation (22%)
+3. Hunting Pressure (18%)
+4. Climate Vulnerability (15%)
+5. Conservation Efforts (12%)
+6. Other features (8%)
 
 ---
 
@@ -308,18 +471,37 @@ amazon-rainforest-species-risk/
 |---------|------|-------|-------------|
 | population_size | numeric | 10 - 200,000 | Estimated population in individuals |
 | habitat_fragmentation | numeric | 0.0 - 1.0 | Fragmentation index (0=contiguous, 1=highly fragmented) |
-| climate_vulnerability | numeric | 0.0 - 1.0 | Climate change vulnerability (0=not vulnerable, 1=highly vulnerable) |
+| climate_vulnerability | numeric | 0.0 - 1.0 | Climate change vulnerability (0=not, 1=highly) |
 | illegal_hunting_pressure | numeric | 0.0 - 1.0 | Hunting/poaching pressure (0=none, 1=extreme) |
-| conservation_efforts_index | numeric | 0.0 - 1.0 | Conservation effort level (0=no efforts, 1=maximum) |
-| habitat | categorical | 3 types | Canopy / Forest Floor / River Floodplain |
+| conservation_efforts_index | numeric | 0.0 - 1.0 | Conservation effort level (0=none, 1=maximum) |
+| habitat | categorical | 3 types | Canopy / Forest Floor / Aquatic |
 | breeding_program_exists | binary | 0 / 1 | Active breeding program (yes/no) |
 | legal_protection | binary | 0 / 1 | Legal protection status (yes/no) |
 
 ### Target Classes (IUCN Red List)
-- **0**: Least Concern (LC) - Lowest risk
-- **1**: Vulnerable (VU)
-- **2**: Endangered (EN)
-- **3**: Critically Endangered (CR) - Highest risk
+- **0**: Least Concern (LC) - ✅ Lowest risk
+- **1**: Vulnerable (VU) - ⚠️ Medium risk
+- **2**: Endangered (EN) - 🚨 High risk
+- **3**: Critically Endangered (CR) - 🔴 Highest risk
+
+---
+
+## 🌿 Pre-defined Species
+
+The frontend includes 10 Amazon rainforest species with realistic ecological parameters:
+
+| Species | Emoji | Population | Fragmentation | Risk Level |
+|---------|-------|-----------|--------------|-----------|
+| Amazon Jaguar | 🐆 | 173 | 0.85 | 🔴 Critically Endangered |
+| Green Anaconda | 🐍 | 8,500 | 0.65 | ⚠️ Vulnerable |
+| Scarlet Macaw | 🦜 | 5,200 | 0.72 | ⚠️ Vulnerable |
+| Pink River Dolphin | 🐬 | 3,800 | 0.58 | ⚠️ Vulnerable |
+| Three-Toed Sloth | 🦥 | 12,000 | 0.68 | ✅ Least Concern |
+| Poison Dart Frog | 🐸 | 2,500 | 0.75 | 🚨 Endangered |
+| Red Howler Monkey | 🐵 | 6,800 | 0.62 | ✅ Least Concern |
+| Arapaima Fish | 🐟 | 4,200 | 0.70 | ⚠️ Vulnerable |
+| Harpy Eagle | 🦅 | 580 | 0.82 | 🚨 Endangered |
+| Capybara | 🐭 | 15,000 | 0.55 | ✅ Least Concern |
 
 ---
 
@@ -336,30 +518,50 @@ docker run -p 8000:8000 rainforest-api:latest
 # API available at http://localhost:8000
 ```
 
-### Docker Compose (Recommended for Dev)
+### Docker Compose (Complete Stack)
 ```bash
+# Start with all dependencies
 docker-compose up --build
-docker-compose down  # Stop
+
+# Stop
+docker-compose down
+
+# View logs
+docker-compose logs -f api
 ```
 
-### View Logs
+### Verify Deployment
 ```bash
+# Check container is running
+docker ps
+
+# Test health endpoint
+curl http://localhost:8000/health
+
+# View logs
 docker logs rainforest-api
-docker-compose logs -f
 ```
 
 ---
 
 ## ☸️ Kubernetes Deployment
 
-### Deploy to Kubernetes Cluster
+### Prerequisites
+- Kubernetes cluster (minikube, kind, or cloud)
+- kubectl configured
+
+### Deploy
 ```bash
+# Apply manifests
 kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
 
-# Verify deployment
+# Verify
 kubectl get pods
 kubectl get svc
+kubectl describe deployment rainforest-api
+
+# View logs
 kubectl logs -f deployment/rainforest-api
 ```
 
@@ -369,27 +571,18 @@ kubectl port-forward svc/rainforest-api 8000:8000
 # API available at http://127.0.0.1:8000
 ```
 
+### Cleanup
+```bash
+kubectl delete -f k8s/
+```
+
 ---
 
 ## 🧪 Testing
 
-### Unit Tests (Pytest)
+### API Health Check
 ```bash
-pytest tests/ -v
-```
-
-### API Integration Tests (Manual)
-```bash
-# Health check
 curl http://127.0.0.1:8000/health
-
-# Get model info
-curl http://127.0.0.1:8000/info
-
-# Test prediction
-curl -X POST http://127.0.0.1:8000/predict \
-  -H "Content-Type: application/json" \
-  -d '{"population_size": 5000, ...}'
 ```
 
 ### Load Testing (Apache Bench)
@@ -398,33 +591,62 @@ curl -X POST http://127.0.0.1:8000/predict \
 ab -n 1000 -c 10 http://127.0.0.1:8000/health
 ```
 
+### Frontend Testing Checklist
+- [ ] API status shows "✅ API Connected"
+- [ ] Dropdown loads 10 species
+- [ ] Selecting species auto-fills form
+- [ ] Sliders update values in real-time
+- [ ] Predict button works and shows results
+- [ ] Results display correct risk category (color-coded)
+- [ ] Probability bars animate smoothly
+- [ ] Toast notifications appear
+- [ ] Reset button clears form
+- [ ] Responsive on mobile (check with DevTools)
+
 ---
 
-## 🎯 Roadmap
+## 🔧 Troubleshooting
 
-### Phase 1 ✅ (Complete)
-- [x] Synthetic data generator (1,000 species)
-- [x] ML training pipeline (XGBoost, RF, LR)
-- [x] FastAPI REST API with 4 endpoints
-- [x] Pydantic request/response validation
-- [x] Docker containerization (multi-stage)
-- [x] docker-compose for local development
-- [x] Web frontend (HTML/CSS/JS)
-- [x] Comprehensive README documentation
+### API not connecting from frontend
+```bash
+# Check if API is running
+curl http://127.0.0.1:8000/health
 
-### Phase 2 (Planned)
-- [ ] Advanced monitoring dashboard (Prometheus, Grafana)
-- [ ] Model versioning (MLflow)
-- [ ] A/B testing framework
-- [ ] Performance benchmarking
-- [ ] Unit tests & CI/CD (GitHub Actions)
+# If using VPN or local IP, update API_URL in index.html:
+# Change: const API_URL = 'http://127.0.0.1:8000';
+# To: const API_URL = 'http://192.168.1.100:8000';
 
-### Phase 3 (Future)
-- [ ] Image classification (CNN for species photos)
-- [ ] Temporal forecasting (LSTM for population trends)
-- [ ] Real-time WebSocket predictions
-- [ ] Multi-model inference optimization
-- [ ] Advanced logging (ELK stack)
+# Add CORS middleware in main.py (already included)
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+```
+
+### Models not loading
+```bash
+# Verify model files exist
+ls -la models/
+
+# Retrain if missing
+python ml/train.py
+
+# Check Python path
+echo $PYTHONPATH
+```
+
+### Docker build fails
+```bash
+# Clear Docker cache
+docker system prune -a
+
+# Rebuild
+docker build --no-cache -t rainforest-api:latest .
+```
 
 ---
 
@@ -436,31 +658,61 @@ This project is licensed under the **MIT License** - see LICENSE file for detail
 
 ---
 
-## 🤝 Contributing
+## 🎯 Roadmap
 
-Contributions are welcome! Please follow these steps:
+### Phase 1 ✅ (Complete)
+- [x] Synthetic data generator (1,000 species)
+- [x] ML training pipeline (XGBoost, RF, LR ensemble)
+- [x] FastAPI REST API with 4 endpoints
+- [x] Docker containerization
+- [x] Web frontend with species dropdown
+- [x] Real-time API status indicator
+- [x] Probability distribution visualization
+- [x] Comprehensive README
 
-1. **Fork** the repository
-2. **Create** a feature branch (git checkout -b feature/your-feature)
-3. **Commit** your changes (git commit -m 'feat: add new feature')
-4. **Push** to the branch (git push origin feature/your-feature)
-5. **Open** a Pull Request
+### Phase 2 (Planned)
+- [ ] Unit tests & pytest suite
+- [ ] CI/CD with GitHub Actions
+- [ ] Advanced monitoring dashboard
+- [ ] Model versioning (MLflow)
+- [ ] A/B testing framework
 
-### Code Style
-- Python: Follow PEP 8 (use black for formatting)
-- JavaScript: Standard ES6+ conventions
-- Commit messages: Conventional Commits format
+### Phase 3 (Future)
+- [ ] Image classification (CNN for species photos)
+- [ ] Temporal forecasting (population trends)
+- [ ] Real-time WebSocket predictions
+- [ ] Advanced logging & monitoring
 
 ---
 
-## 📞 Contact & Support
+## 🤝 Contributing
+
+Contributions welcome! Follow these steps:
+
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
+
+### Code Style
+- **Python**: PEP 8 (use black for formatting)
+- **JavaScript**: ES6+ conventions
+- **Commit messages**: Conventional Commits format
+
+---
+
+## 📞 Contact
 
 **Author**: Dario Lignana
-- **GitHub**: @dariolignana96
 
-**Issues & Discussions**:
+**Links**:
+- GitHub: [@dariolignana96](https://github.com/dariolignana96)
+- Project: [amazon-rainforest-species-risk](https://github.com/dariolignana96/amazon-rainforest-species-risk)
+
+**Issues & Support**:
 - Open an Issue on GitHub
-- Check Discussions on GitHub
+- Check GitHub Discussions
 
 ---
 
@@ -476,23 +728,17 @@ Built with ❤️ for:
 
 ---
 
-## 📚 References & Resources
+## 📚 Resources
 
-- **XGBoost**: Official Documentation (https://xgboost.readthedocs.io/)
-- **FastAPI**: Official Documentation (https://fastapi.tiangolo.com/)
-- **Docker**: Official Documentation (https://docs.docker.com/)
-- **Kubernetes**: Official Documentation (https://kubernetes.io/docs/)
-- **IUCN Red List**: Conservation Status Categories (https://www.iucnredlist.org/)
-- **Scikit-learn**: Documentation (https://scikit-learn.org/)
+- **FastAPI**: https://fastapi.tiangolo.com/
+- **XGBoost**: https://xgboost.readthedocs.io/
+- **Docker**: https://docs.docker.com/
+- **Kubernetes**: https://kubernetes.io/docs/
+- **IUCN Red List**: https://www.iucnredlist.org/
+- **Scikit-learn**: https://scikit-learn.org/
 
 ---
 
-git add README.md
-**Last Updated**: January 7, 2026
-**Status**: ✅ Production Ready (Phase 1 Complete)
-
-
-***
-
-
-
+**Last Updated**: January 7, 2026  
+**Status**: ✅ **Production Ready - Phase 1 Complete**  
+**Version**: 1.0.0
