@@ -44,7 +44,11 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install flake8 pytest httpx fastapi pydantic numpy
+        run: |
+          pip install --upgrade pip
+          pip install fastapi pydantic uvicorn httpx pytest pytest-asyncio
+          pip install pandas numpy scikit-learn xgboost joblib
+          pip install flake8
 
       - name: Lint
         run: flake8 api/ ml/ data/ --max-line-length=120 --ignore=E501,W503,W293,F401,F841,F541
