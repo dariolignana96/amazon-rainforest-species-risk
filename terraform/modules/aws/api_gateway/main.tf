@@ -34,20 +34,20 @@ resource "aws_apigatewayv2_api" "main" {
 resource "aws_apigatewayv2_stage" "default" {
   api_id      = aws_apigatewayv2_api.main.id
   name        = var.environment
-  auto_deploy = true  # re-deploya automaticamente quando cambia la configurazione
+  auto_deploy = true # re-deploya automaticamente quando cambia la configurazione
 
   access_log_settings {
     destination_arn = aws_cloudwatch_log_group.apigw.arn
     format = jsonencode({
-      requestId      = "$context.requestId"
-      sourceIp       = "$context.identity.sourceIp"
-      requestTime    = "$context.requestTime"
-      protocol       = "$context.protocol"
-      httpMethod     = "$context.httpMethod"
-      resourcePath   = "$context.resourcePath"
-      routeKey       = "$context.routeKey"
-      status         = "$context.status"
-      responseLength = "$context.responseLength"
+      requestId          = "$context.requestId"
+      sourceIp           = "$context.identity.sourceIp"
+      requestTime        = "$context.requestTime"
+      protocol           = "$context.protocol"
+      httpMethod         = "$context.httpMethod"
+      resourcePath       = "$context.resourcePath"
+      routeKey           = "$context.routeKey"
+      status             = "$context.status"
+      responseLength     = "$context.responseLength"
       integrationLatency = "$context.integrationLatency"
     })
   }
@@ -55,10 +55,10 @@ resource "aws_apigatewayv2_stage" "default" {
 
 # --- Lambda Integration ---
 resource "aws_apigatewayv2_integration" "lambda" {
-  api_id             = aws_apigatewayv2_api.main.id
-  integration_type   = "AWS_PROXY"  # proxy: API GW passa tutto il payload alla Lambda
-  integration_uri    = var.lambda_invoke_arn
-  integration_method = "POST"
+  api_id                 = aws_apigatewayv2_api.main.id
+  integration_type       = "AWS_PROXY" # proxy: API GW passa tutto il payload alla Lambda
+  integration_uri        = var.lambda_invoke_arn
+  integration_method     = "POST"
   payload_format_version = "2.0"
 }
 

@@ -30,7 +30,7 @@ data "aws_ami" "amazon_linux_2023" {
 # --- EC2 Instance ---
 resource "aws_instance" "api_server" {
   ami                    = data.aws_ami.amazon_linux_2023.id
-  instance_type          = var.instance_type  # t2.micro = FREE TIER
+  instance_type          = var.instance_type # t2.micro = FREE TIER
   subnet_id              = var.public_subnet_id
   vpc_security_group_ids = [var.security_group_id]
   iam_instance_profile   = var.ec2_instance_profile
@@ -75,7 +75,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_cpu_high" {
   evaluation_periods  = 2
   metric_name         = "CPUUtilization"
   namespace           = "AWS/EC2"
-  period              = 300  # 5 minuti
+  period              = 300 # 5 minuti
   statistic           = "Average"
   threshold           = 80
   alarm_description   = "CPU EC2 sopra l'80% per 10 minuti"

@@ -42,7 +42,7 @@ variable "container_image" {
 variable "aws_region" {
   description = "Regione AWS principale"
   type        = string
-  default     = "eu-west-1"  # Irlanda - più vicina all'Italia
+  default     = "eu-west-1" # Irlanda - più vicina all'Italia
 }
 
 variable "vpc_cidr" {
@@ -70,7 +70,7 @@ variable "ec2_instance_type" {
 variable "azure_location" {
   description = "Regione Azure principale"
   type        = string
-  default     = "West Europe"  # Amsterdam - più vicina all'Italia
+  default     = "West Europe" # Amsterdam - più vicina all'Italia
 }
 
 variable "azure_vnet_cidr" {

@@ -27,17 +27,17 @@ resource "aws_lambda_function" "predict" {
   # source_code_hash cambia solo se il codice cambia → Terraform re-deploya solo se necessario
 
   runtime = "python3.11"
-  handler = "handler.lambda_handler"  # file handler.py, funzione lambda_handler
+  handler = "handler.lambda_handler" # file handler.py, funzione lambda_handler
 
-  role    = var.lambda_role_arn
-  timeout = 30   # secondi (max 15 minuti, ma 30s è ok per inference ML)
-  memory_size = 512  # MB - più memoria = più CPU proporzionalmente
+  role        = var.lambda_role_arn
+  timeout     = 30  # secondi (max 15 minuti, ma 30s è ok per inference ML)
+  memory_size = 512 # MB - più memoria = più CPU proporzionalmente
 
   environment {
     variables = {
-      ENVIRONMENT    = var.environment
-      S3_BUCKET      = var.s3_bucket
-      MODEL_KEY      = "models/xgboost_v1.pkl"
+      ENVIRONMENT      = var.environment
+      S3_BUCKET        = var.s3_bucket
+      MODEL_KEY        = "models/xgboost_v1.pkl"
       PREPROCESSOR_KEY = "models/preprocessor.pkl"
     }
   }

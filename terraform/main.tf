@@ -118,18 +118,18 @@ module "aws_ecs" {
 }
 
 module "aws_lambda" {
-  source        = "./modules/aws/lambda"
-  environment   = var.environment
-  project       = var.project_name
-  s3_bucket     = module.aws_s3.models_bucket_name
+  source          = "./modules/aws/lambda"
+  environment     = var.environment
+  project         = var.project_name
+  s3_bucket       = module.aws_s3.models_bucket_name
   lambda_role_arn = module.aws_iam.lambda_role_arn
 }
 
 module "aws_api_gateway" {
-  source          = "./modules/aws/api_gateway"
-  environment     = var.environment
-  project         = var.project_name
-  lambda_invoke_arn = module.aws_lambda.lambda_invoke_arn
+  source               = "./modules/aws/api_gateway"
+  environment          = var.environment
+  project              = var.project_name
+  lambda_invoke_arn    = module.aws_lambda.lambda_invoke_arn
   lambda_function_name = module.aws_lambda.lambda_function_name
 }
 

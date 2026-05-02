@@ -14,7 +14,7 @@
 # --- VPC principale ---
 resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
-  enable_dns_hostnames = true  # necessario per ECS service discovery
+  enable_dns_hostnames = true # necessario per ECS service discovery
   enable_dns_support   = true
 
   tags = {
@@ -34,14 +34,14 @@ resource "aws_internet_gateway" "main" {
 
 # --- Subnet pubbliche (una per AZ) ---
 resource "aws_subnet" "public" {
-  count             = length(var.availability_zones)
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = cidrsubnet(var.vpc_cidr, 8, count.index)
+  count      = length(var.availability_zones)
+  vpc_id     = aws_vpc.main.id
+  cidr_block = cidrsubnet(var.vpc_cidr, 8, count.index)
   # cidrsubnet("10.0.0.0/16", 8, 0) → "10.0.0.0/24"
   # cidrsubnet("10.0.0.0/16", 8, 1) → "10.0.1.0/24"
   availability_zone = var.availability_zones[count.index]
 
-  map_public_ip_on_launch = true  # EC2 ottengono IP pubblico automaticamente
+  map_public_ip_on_launch = true # EC2 ottengono IP pubblico automaticamente
 
   tags = {
     Name = "${var.project}-${var.environment}-public-${count.index + 1}"
@@ -51,9 +51,9 @@ resource "aws_subnet" "public" {
 
 # --- Subnet private (una per AZ) ---
 resource "aws_subnet" "private" {
-  count             = length(var.availability_zones)
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = cidrsubnet(var.vpc_cidr, 8, count.index + 10)
+  count      = length(var.availability_zones)
+  vpc_id     = aws_vpc.main.id
+  cidr_block = cidrsubnet(var.vpc_cidr, 8, count.index + 10)
   # Offset +10 per non sovrapporre con le subnet pubbliche
   availability_zone = var.availability_zones[count.index]
 
@@ -66,7 +66,7 @@ resource "aws_subnet" "private" {
 # --- Elastic IP per NAT Gateway ---
 # NAT Gateway richiede un IP pubblico statico dedicato
 resource "aws_eip" "nat" {
-  count  = 1  # Un solo NAT Gateway per risparmiare (non HA, ma ok per dev)
+  count  = 1 # Un solo NAT Gateway per risparmiare (non HA, ma ok per dev)
   domain = "vpc"
 
   tags = {
@@ -79,7 +79,7 @@ resource "aws_eip" "nat" {
 # chiamare AWS APIs, etc. - senza essere raggiungibili da internet.
 resource "aws_nat_gateway" "main" {
   allocation_id = aws_eip.nat[0].id
-  subnet_id     = aws_subnet.public[0].id  # il NAT sta nella subnet pubblica
+  subnet_id     = aws_subnet.public[0].id # il NAT sta nella subnet pubblica
 
   tags = {
     Name = "${var.project}-${var.environment}-nat"
@@ -152,7 +152,7 @@ resource "aws_security_group" "alb" {
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"  # -1 = tutti i protocolli
+    protocol    = "-1" # -1 = tutti i protocolli
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -171,7 +171,7 @@ resource "aws_security_group" "ecs_tasks" {
     from_port       = 8000
     to_port         = 8000
     protocol        = "tcp"
-    security_groups = [aws_security_group.alb.id]  # solo dal ALB, non da internet
+    security_groups = [aws_security_group.alb.id] # solo dal ALB, non da internet
   }
 
   egress {

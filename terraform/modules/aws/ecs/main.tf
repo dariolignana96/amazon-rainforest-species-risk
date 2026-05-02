@@ -31,7 +31,7 @@ resource "aws_ecs_cluster" "main" {
 # I log del container vanno qui (stdout/stderr del processo FastAPI)
 resource "aws_cloudwatch_log_group" "ecs" {
   name              = "/ecs/${var.project}/${var.environment}"
-  retention_in_days = 30  # Elimina log dopo 30 giorni (risparmio costi)
+  retention_in_days = 30 # Elimina log dopo 30 giorni (risparmio costi)
 
   tags = {
     Name = "${var.project}-${var.environment}-logs"
@@ -43,9 +43,9 @@ resource "aws_cloudwatch_log_group" "ecs" {
 resource "aws_ecs_task_definition" "api" {
   family                   = "${var.project}-${var.environment}-api"
   requires_compatibilities = ["FARGATE"]
-  network_mode             = "awsvpc"  # obbligatorio per Fargate
-  cpu                      = var.cpu      # 256 = 0.25 vCPU
-  memory                   = var.memory   # 512 MB
+  network_mode             = "awsvpc"   # obbligatorio per Fargate
+  cpu                      = var.cpu    # 256 = 0.25 vCPU
+  memory                   = var.memory # 512 MB
   task_role_arn            = var.task_role_arn
   execution_role_arn       = var.task_role_arn
 
@@ -60,7 +60,7 @@ resource "aws_ecs_task_definition" "api" {
 
     environment = [
       { name = "ENVIRONMENT", value = var.environment },
-      { name = "PORT",        value = tostring(var.container_port) }
+      { name = "PORT", value = tostring(var.container_port) }
     ]
 
     # Health check: ECS riavvia il container se l'health check fallisce 3 volte
@@ -69,7 +69,7 @@ resource "aws_ecs_task_definition" "api" {
       interval    = 30
       timeout     = 5
       retries     = 3
-      startPeriod = 60  # dà 60 secondi al container per avviarsi prima dei check
+      startPeriod = 60 # dà 60 secondi al container per avviarsi prima dei check
     }
 
     logConfiguration = {
@@ -86,12 +86,12 @@ resource "aws_ecs_task_definition" "api" {
 # --- Application Load Balancer ---
 resource "aws_lb" "main" {
   name               = "${var.project}-${var.environment}-alb"
-  internal           = false  # pubblico (accessibile da internet)
+  internal           = false # pubblico (accessibile da internet)
   load_balancer_type = "application"
   security_groups    = [var.alb_security_group_id]
   subnets            = var.public_subnets
 
-  enable_deletion_protection = false  # in prod mettere true
+  enable_deletion_protection = false # in prod mettere true
 
   tags = {
     Name = "${var.project}-${var.environment}-alb"
@@ -104,7 +104,7 @@ resource "aws_lb_target_group" "api" {
   port        = var.container_port
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
-  target_type = "ip"  # Fargate usa IP, non instance ID
+  target_type = "ip" # Fargate usa IP, non instance ID
 
   health_check {
     enabled             = true
@@ -134,13 +134,13 @@ resource "aws_ecs_service" "api" {
   name            = "${var.project}-${var.environment}-api-service"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.api.arn
-  desired_count   = 2  # 2 repliche in 2 AZ diverse = HA
+  desired_count   = 2 # 2 repliche in 2 AZ diverse = HA
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = var.private_subnets  # container nelle subnet private
+    subnets          = var.private_subnets # container nelle subnet private
     security_groups  = [var.ecs_security_group_id]
-    assign_public_ip = false  # accesso solo via ALB, non diretto
+    assign_public_ip = false # accesso solo via ALB, non diretto
   }
 
   load_balancer {

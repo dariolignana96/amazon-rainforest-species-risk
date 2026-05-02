@@ -37,8 +37,8 @@ resource "aws_iam_role_policy" "ec2_s3_read" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Effect   = "Allow"
-      Action   = ["s3:GetObject", "s3:ListBucket"]
+      Effect = "Allow"
+      Action = ["s3:GetObject", "s3:ListBucket"]
       Resource = [
         "arn:aws:s3:::${var.project}-${var.environment}-models",
         "arn:aws:s3:::${var.project}-${var.environment}-models/*"
@@ -85,8 +85,8 @@ resource "aws_iam_role_policy" "ecs_task_policy" {
         Resource = "arn:aws:logs:*:*:*"
       },
       {
-        Effect   = "Allow"
-        Action   = ["s3:GetObject", "s3:ListBucket"]
+        Effect = "Allow"
+        Action = ["s3:GetObject", "s3:ListBucket"]
         Resource = [
           "arn:aws:s3:::${var.project}-${var.environment}-models",
           "arn:aws:s3:::${var.project}-${var.environment}-models/*"

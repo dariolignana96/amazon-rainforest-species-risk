@@ -19,14 +19,14 @@ resource "azurerm_container_group" "api" {
   ip_address_type     = "Public"
   dns_name_label      = "${var.project}-${var.environment}-api"
   # FQDN risultante: rainforest-dev-api.westeurope.azurecontainer.io
-  os_type             = "Linux"
-  restart_policy      = "Always"
+  os_type        = "Linux"
+  restart_policy = "Always"
 
   container {
     name   = "rainforest-api"
     image  = var.container_image
-    cpu    = "0.5"    # 0.5 vCPU
-    memory = "0.5"    # 0.5 GB RAM
+    cpu    = "0.5" # 0.5 vCPU
+    memory = "0.5" # 0.5 GB RAM
 
     ports {
       port     = 8000
