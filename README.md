@@ -37,6 +37,7 @@ python ml/train.py
 - **Container:** Docker, Docker Compose
 - **Orchestrazione:** Kubernetes (Deployment + Service manifests)
 - **Infrastruttura:** Terraform — AWS + Azure (solo pianificazione, no deploy attivo)
+- **CI/CD:** GitHub Actions — terraform validate + Python lint ad ogni push
 
 ---
 
@@ -59,7 +60,12 @@ amazon-rainforest-species-risk/
 │   ├── synthetic_generator.py
 │   ├── raw/amazon_species.csv
 │   └── processed/               # Output preprocessing (generato localmente)
-├── k8s/                         # Kubernetes manifests (work in progress)
+├── k8s/
+│   ├── deployment.yaml          # Kubernetes Deployment (2 repliche)
+│   └── service.yaml             # Kubernetes Service (LoadBalancer)
+├── .github/
+│   └── workflows/
+│       └── ci.yml               # CI: terraform validate + Python lint
 ├── docs/                        # Documentazione (work in progress)
 ├── tests/                       # Test suite (work in progress)
 ├── terraform/                   # Infrastructure as Code — AWS + Azure
@@ -73,6 +79,7 @@ amazon-rainforest-species-risk/
 ├── docker-compose.yml
 ├── requirements.txt
 └── README.md
+
 ```
 
 ---
@@ -141,6 +148,15 @@ Architettura pianificata:
 
 ---
 
+## CI/CD
+
+GitHub Actions esegue automaticamente ad ogni push su `main`:
+- `terraform validate` — verifica sintassi infrastruttura
+- `terraform fmt -check` — verifica formattazione
+- `flake8` — lint del codice Python
+
+---
+
 ## ML Models
 
 Voting ensemble su 1.000 record sintetici con 10 feature ecologiche.
@@ -169,4 +185,3 @@ Target: 4 classi IUCN (Least Concern / Vulnerable / Endangered / Critically Enda
 
 MIT — see [LICENSE](LICENSE) for details.  
 Dataset: 100% sintetico, generato algoritmicamente. Nessun dato di terze parti.
-
