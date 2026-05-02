@@ -17,6 +17,7 @@ All data is synthetic and generated locally — no external services required.
 | Docker / Docker Compose | ✅ Gratuito — gira in locale |
 | Kubernetes (minikube/kind) | ✅ Gratuito — gira in locale |
 | `terraform init` / `validate` / `plan` | ✅ Gratuito — solo verifica locale |
+| GitHub Actions CI | ✅ Gratuito — 2.000 min/mese free |
 | `terraform apply` su AWS/Azure | ❌ Genera costi — non eseguire |
 
 **Regola:** tutto fino a `terraform plan` è sicuro e non genera costi.  
@@ -37,7 +38,7 @@ python ml/train.py
 - **Container:** Docker, Docker Compose
 - **Orchestrazione:** Kubernetes (Deployment + Service manifests)
 - **Infrastruttura:** Terraform — AWS + Azure (solo pianificazione, no deploy attivo)
-- **CI/CD:** GitHub Actions — terraform validate + Python lint ad ogni push
+- **CI/CD:** GitHub Actions — terraform validate + Python lint + pytest ad ogni push
 
 ---
 
@@ -60,14 +61,16 @@ amazon-rainforest-species-risk/
 │   ├── synthetic_generator.py
 │   ├── raw/amazon_species.csv
 │   └── processed/               # Output preprocessing (generato localmente)
+├── tests/
+│   ├── test_api.py              # 19 test endpoints FastAPI
+│   └── test_schemas.py          # 5 test validazione Pydantic
 ├── k8s/
 │   ├── deployment.yaml          # Kubernetes Deployment (2 repliche)
 │   └── service.yaml             # Kubernetes Service (LoadBalancer)
 ├── .github/
 │   └── workflows/
-│       └── ci.yml               # CI: terraform validate + Python lint
+│       └── ci.yml               # CI: terraform validate + lint + pytest
 ├── docs/                        # Documentazione (work in progress)
-├── tests/                       # Test suite (work in progress)
 ├── terraform/                   # Infrastructure as Code — AWS + Azure
 │   ├── main.tf                  # Entry point multi-cloud
 │   ├── variables.tf
@@ -79,7 +82,6 @@ amazon-rainforest-species-risk/
 ├── docker-compose.yml
 ├── requirements.txt
 └── README.md
-
 ```
 
 ---
@@ -107,6 +109,17 @@ python -m http.server 5500
 ```
 
 Poi apri http://127.0.0.1:5500/index.html.
+
+---
+
+## Test
+
+```bash
+pip install pytest httpx
+pytest tests/ -v
+```
+
+24 test — nessuna dipendenza cloud, nessun costo.
 
 ---
 
@@ -154,6 +167,7 @@ GitHub Actions esegue automaticamente ad ogni push su `main`:
 - `terraform validate` — verifica sintassi infrastruttura
 - `terraform fmt -check` — verifica formattazione
 - `flake8` — lint del codice Python
+- `pytest` — 24 test suite API e schemas
 
 ---
 
