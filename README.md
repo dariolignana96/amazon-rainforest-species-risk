@@ -1,90 +1,156 @@
-﻿# Amazon Rainforest Wildlife Risk Assessment
+﻿# 🌿 Amazon Rainforest Wildlife Risk Assessment
 
 ML/MLOps full-stack application predicting extinction risk for Amazon rainforest
 species. Ensemble model (XGBoost + Random Forest + Logistic Regression) served
 via FastAPI, containerized with Docker, and deployable on Kubernetes.
 All data is synthetic and generated locally — no external services required.
 
+> **Progetto formativo/portfolio** — nessun servizio cloud attivo, nessun costo.
+
+---
+
+## ⚠️ Nota costi
+
+| Componente | Costo |
+|---|---|
+| Python, FastAPI, ML models | ✅ Gratuito — gira in locale |
+| Docker / Docker Compose | ✅ Gratuito — gira in locale |
+| Kubernetes (minikube/kind) | ✅ Gratuito — gira in locale |
+| `terraform init` / `validate` / `plan` | ✅ Gratuito — solo verifica locale |
+| `terraform apply` su AWS/Azure | ❌ Genera costi — non eseguire |
+
+**Regola:** tutto fino a `terraform plan` è sicuro e non genera costi.  
+`terraform apply` non va eseguito senza un account cloud attivo e consapevolezza dei costi.
+
+I modelli ML (`.pkl`) non sono inclusi nel repository — vanno rigenerati localmente con:
+
+```bash
+python ml/train.py
+```
+
+---
+
 ## Stack
 
-- Python 3 — XGBoost, scikit-learn, pandas, FastAPI, Uvicorn
-- Frontend: HTML5, CSS3, JavaScript (vanilla)
-- Docker, Docker Compose
-- Kubernetes (Deployment + Service manifests)
+- **Backend:** Python 3, XGBoost, scikit-learn, pandas, FastAPI, Uvicorn
+- **Frontend:** HTML5, CSS3, JavaScript (vanilla)
+- **Container:** Docker, Docker Compose
+- **Orchestrazione:** Kubernetes (Deployment + Service manifests)
+- **Infrastruttura:** Terraform — AWS + Azure (solo pianificazione, no deploy attivo)
 
-## Structure
+---
 
-    amazon-rainforest-species-risk/
-    ├── api/
-    │   ├── main.py                 # FastAPI app & endpoints
-    │   ├── schemas.py              # Pydantic schemas
-    │   └── routers/
-    ├── frontend/
-    │   └── index.html              # Single-page web UI
-    ├── ml/
-    │   ├── preprocessing.py        # Data preprocessing pipeline
-    │   ├── models.py               # Model definitions & training
-    │   └── train.py                # Training entry point
-    ├── models/                     # Serialized models (joblib)
-    ├── data/
-    │   ├── synthetic_generator.py
-    │   └── raw/amazon_species.csv
-    ├── k8s/
-    │   ├── deployment.yaml
-    │   └── service.yaml
-    ├── Dockerfile
-    ├── docker-compose.yml
-    ├── requirements.txt
-    └── README.md
+## Struttura
 
-## Setup
+amazon-rainforest-species-risk/
+├── api/
+│   ├── main.py                  # FastAPI app & endpoints
+│   ├── schemas.py               # Pydantic schemas
+│   └── routers/                 # Endpoint modulari (espandibile)
+├── frontend/
+│   └── index.html               # Single-page web UI
+├── ml/
+│   ├── preprocessing.py         # Data preprocessing pipeline
+│   ├── models.py                # Model definitions & training
+│   └── train.py                 # Training entry point
+├── models/                      # Modelli .pkl — generati con: python ml/train.py
+├── data/
+│   ├── synthetic_generator.py
+│   ├── raw/amazon_species.csv
+│   └── processed/               # Output preprocessing (generato localmente)
+├── k8s/                         # Kubernetes manifests (work in progress)
+├── docs/                        # Documentazione (work in progress)
+├── tests/                       # Test suite (work in progress)
+├── terraform/                   # Infrastructure as Code — AWS + Azure
+│   ├── main.tf                  # Entry point multi-cloud
+│   ├── variables.tf
+│   ├── outputs.tf
+│   └── modules/
+│       ├── aws/                 # VPC, EC2, S3, IAM, ECS, Lambda, API Gateway
+│       └── azure/               # Resource Group, VNet, ACI
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+└── README.md
 
-### Local
+---
 
-    git clone https://github.com/dariolignana96/amazon-rainforest-species-risk.git
-    cd amazon-rainforest-species-risk
-    python -m venv venv
-    source venv/bin/activate  # Windows: venv\Scripts\Activate.ps1
-    pip install -r requirements.txt
-    uvicorn api.main:app --reload
+## Setup locale
+
+```bash
+git clone https://github.com/dariolignana96/amazon-rainforest-species-risk.git
+cd amazon-rainforest-species-risk
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python ml/train.py        # genera i modelli .pkl in models/
+uvicorn api.main:app --reload
+```
 
 - API: http://127.0.0.1:8000
 - Swagger docs: http://127.0.0.1:8000/docs
 
-Frontend: open `frontend/index.html` directly, or:
+Frontend — apri `frontend/index.html` direttamente, oppure:
 
-    cd frontend
-    python -m http.server 5500
+```bash
+cd frontend
+python -m http.server 5500
+```
 
-Then open http://127.0.0.1:5500/index.html.
+Poi apri http://127.0.0.1:5500/index.html.
 
-### Docker
+---
 
-    docker-compose up --build
+## Docker
 
-API available at http://localhost:8000.
+```bash
+docker-compose up --build
+```
 
-### Kubernetes
+API disponibile su http://localhost:8000.
 
-    kubectl apply -f k8s/deployment.yaml
-    kubectl apply -f k8s/service.yaml
-    kubectl port-forward svc/rainforest-api 8000:8000
+---
+
+## Kubernetes
+
+```bash
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
+kubectl port-forward svc/rainforest-api 8000:8000
+```
+
+---
+
+## Terraform (infrastruttura — solo pianificazione)
+
+Infrastruttura multi-cloud definita come codice. Nessuna risorsa viene creata
+eseguendo solo i comandi di verifica.
+
+```bash
+cd terraform/
+terraform init        # scarica i provider AWS e Azure
+terraform validate    # verifica la sintassi
+terraform plan        # mostra il piano (nessun costo, nessuna risorsa creata)
+```
+
+Architettura pianificata:
+- **AWS:** VPC, EC2 t2.micro (free tier), S3, IAM, ECS Fargate, Lambda, API Gateway
+- **Azure:** Resource Group, VNet, Container Instance (ACI)
+
+---
 
 ## ML Models
 
-Voting ensemble combining three classifiers trained on 1,000 synthetic species
-records with 10 ecological features (population size, habitat fragmentation,
-climate vulnerability, hunting pressure, conservation efforts, habitat type,
-breeding program, legal protection).
+Voting ensemble su 1.000 record sintetici con 10 feature ecologiche.
+Target: 4 classi IUCN (Least Concern / Vulnerable / Endangered / Critically Endangered).
 
-Target: 4-class IUCN category (Least Concern / Vulnerable / Endangered /
-Critically Endangered).
-
-| Model | Accuracy | Ensemble Weight |
+| Model | Accuracy | Peso ensemble |
 |---|---|---|
 | XGBoost | ~85% | 50% |
 | Random Forest | ~82% | 30% |
 | Logistic Regression | ~75% | 20% |
+
+---
 
 ## API Endpoints
 
@@ -95,7 +161,10 @@ Critically Endangered).
 | POST | /predict | Single species prediction |
 | POST | /bulk-predict | Batch predictions |
 
+---
+
 ## License
 
-MIT — see [LICENSE](LICENSE) for details.
-Dataset: 100% synthetic, generated algorithmically. No third-party data included.
+MIT — see [LICENSE](LICENSE) for details.  
+Dataset: 100% sintetico, generato algoritmicamente. Nessun dato di terze parti.
+

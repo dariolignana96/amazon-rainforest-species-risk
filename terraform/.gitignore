@@ -1,0 +1,15 @@
+# Terraform state (MAI committare - contiene dati sensibili)
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# Variabili (potrebbero contenere credenziali)
+*.tfvars
+!*.tfvars.example
+
+# Package Lambda generato da Terraform
+*.zip
+
+# Temporanei
+*.bak
+.DS_Store

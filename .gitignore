@@ -196,3 +196,11 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Terraform
+terraform/.terraform/
+terraform/*.tfvars
+terraform/*.zip
+
+# Modelli ML serializzati (pesanti, ricreabili con: python ml/train.py)
+models/*.pkl
