@@ -42,6 +42,7 @@ python ml/train.py
 
 ## Struttura
 
+```
 amazon-rainforest-species-risk/
 ├── api/
 │   ├── main.py                  # FastAPI app & endpoints
@@ -72,6 +73,7 @@ amazon-rainforest-species-risk/
 ├── docker-compose.yml
 ├── requirements.txt
 └── README.md
+```
 
 ---
 
