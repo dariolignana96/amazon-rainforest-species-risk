@@ -5,11 +5,11 @@ species. Ensemble model (XGBoost + Random Forest + Logistic Regression) served
 via FastAPI, containerized with Docker, and deployable on Kubernetes.
 All data is synthetic and generated locally — no external services required.
 
-> **Progetto formativo/portfolio** — nessun servizio cloud attivo, nessun costo.
+> ⚠️ Progetto formativo/portfolio — nessun servizio cloud attivo, nessun costo. Leggi il [DISCLAIMER](DISCLAIMER.md) prima di usare questo codice.
 
 ---
 
-## ⚠️ Nota costi
+## Nota costi
 
 | Componente | Costo |
 |---|---|
